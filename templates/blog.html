@@ -1,0 +1,140 @@
+{% load static %}
+{% include 'navbar.html' %}
+
+<div class="slider-area ">
+
+<div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'assets/img/hero/category.jpg' %}">
+<div class="container">
+<div class="row">
+<div class="col-xl-12">
+<div class="hero-cap text-center">
+<h2>Our Blogs</h2>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<section class="blog_area section-padding">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 mb-5 mb-lg-0">
+<div class="blog_left_sidebar">
+
+{% for blog in blog_data %}
+
+<article class="blog_item">
+<div class="blog_item_img">
+<img class="card-img rounded-0" src="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/media/{{ blog.img }}" alt="" data-pagespeed-url-hash="3197336529" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+<a href="#" class="blog_item_date">
+<h3>15</h3>
+<p>Jan</p>
+</a>
+</div>
+<div class="blog_details">
+<a class="d-inline-block" href="single-blog.html">
+<h2>{{blog.heading}}</h2>
+</a>
+<p style="height: 50px;overflow: hidden;">{{blog.content}}</p>
+
+</div>
+</article>
+
+{% endfor %}
+
+
+<nav class="blog-pagination justify-content-center d-flex">
+<ul class="pagination">
+<li class="page-item">
+<a href="#" class="page-link" aria-label="Previous">
+<i class="ti-angle-left"></i>
+</a>
+</li>
+<li class="page-item">
+<a href="#" class="page-link">1</a>
+</li>
+<li class="page-item active">
+<a href="#" class="page-link">2</a>
+</li>
+<li class="page-item">
+<a href="#" class="page-link" aria-label="Next">
+<i class="ti-angle-right"></i>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class="col-lg-4">
+<div class="blog_right_sidebar">
+<aside class="single_sidebar_widget search_widget">
+<form action="#">
+<div class="form-group">
+<div class="input-group mb-3">
+<input type="text" class="form-control" placeholder='Search Keyword' onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'">
+<div class="input-group-append">
+<button class="btns" type="button"><i class="ti-search"></i></button>
+</div>
+</div>
+</div>
+<button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn" type="submit">Search</button>
+</form>
+</aside>
+<aside class="single_sidebar_widget popular_post_widget">
+<h3 class="widget_title">Recent Post</h3>
+<div class="media post_item">
+<img src="assets/img/post/xpost_1.png.pagespeed.ic.DHraJO02o0.webp" alt="post" data-pagespeed-url-hash="1157754404" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+<div class="media-body">
+<a href="single-blog.html">
+<h3>From life was you fish...</h3>
+</a>
+<p>January 12, 2019</p>
+</div>
+</div>
+<div class="media post_item">
+<img src="assets/img/post/xpost_2.png.pagespeed.ic.7vUh6DKCND.webp" alt="post" data-pagespeed-url-hash="1452254325" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+<div class="media-body">
+<a href="single-blog.html">
+<h3>The Amazing Hubble</h3>
+</a>
+<p>02 Hours ago</p>
+</div>
+</div>
+<div class="media post_item">
+<img src="assets/img/post/xpost_3.png.pagespeed.ic.hn99OMdlg6.webp" alt="post" data-pagespeed-url-hash="1746754246" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+<div class="media-body">
+<a href="single-blog.html">
+<h3>Astronomy Or Astrology</h3>
+</a>
+<p>03 Hours ago</p>
+</div>
+</div>
+<div class="media post_item">
+<img src="assets/img/post/xpost_4.png.pagespeed.ic.QtzHWu9kKX.webp" alt="post" data-pagespeed-url-hash="2041254167" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+<div class="media-body">
+<a href="single-blog.html">
+<h3>Asteroids telescope</h3>
+</a>
+<p>01 Hours ago</p>
+</div>
+</div>
+</aside>
+
+<aside class="single_sidebar_widget newsletter_widget">
+<h4 class="widget_title">Newsletter</h4>
+<form action="#">
+<div class="form-group">
+<input type="email" class="form-control" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
+</div>
+<button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn" type="submit">Subscribe</button>
+</form>
+</aside>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+{% include 'footer.html' %}

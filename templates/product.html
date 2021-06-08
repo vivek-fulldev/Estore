@@ -1,0 +1,341 @@
+{% load static %} {% include 'navbar.html' %}
+
+<div class="slider-area">
+  <div
+    class="single-slider slider-height2 d-flex align-items-center"
+    data-background="{% static 'assets/img/hero/category.jpg' %}"
+    style="background-image: url('assets/img/hero/category.jpg')"
+  >
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="hero-cap text-center">
+            <h2>{{ product_data.category }}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .alerts {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    position: fixed;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+    top: 20px;
+    z-index: 99999;
+    right: 11px;
+    display: none;
+  }
+
+  .alerts.success {
+    background-color: #04aa6d;
+  }
+  .alerts.info {
+    background-color: #2196f3;
+  }
+  .alerts.warning {
+    background-color: #ff9800;
+  }
+
+  .closebtn {
+    margin-right: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 24px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .closebtn:hover {
+    color: black;
+  }
+  .adj{
+
+    margin: 25px auto;
+    display: block;
+    text-align: center;
+    width: 120px;
+
+  }
+</style>
+
+<div id="alert1" class="alerts">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';"
+    >&times;</span
+  >
+  <div style="color: white" id="msg">
+    Indicates a dangerous or potentially negative action.
+  </div>
+</div>
+
+<div class="product_image_area">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div
+        class="flex"
+        style="display: flex; margin: 0 auto; overflow-y: scroll"
+      >
+        {% for img in image %}
+
+        <img
+          id="myImg"
+          src="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/media/{{ img.image }}"
+          alt="#"
+          style="height: auto !important; margin: 1%"
+          class="img-fluid myImage"
+        />
+
+        {% endfor %}
+      </div>
+<p id="host" style="display:none">{{ request.scheme }}://{{ request.META.HTTP_HOST }}</p>
+      <div class="col-lg-8">
+        <div class="single_product_text text-center">
+          <h3  style="max-width: 500px; margin: 0 auto">
+            {{product_data.product_name}}
+          </h3>
+          <p id="p3" style="display:none">{{product_data.id}}</p>
+          <p>{{ product_data.description }}</p>
+          <div class="card_area">
+            <div class="product_count_area">
+              <p>Quantity</p>
+              <div class="product_count d-inline-block">
+                <span
+                  class="product_count_item inumber-decrement"
+                  onclick="subtactpricesetter()"
+                >
+                  <i class="ti-minus"></i
+                ></span>
+                <input
+                  class="product_count_item input-number"
+                  type="text"
+                  value="1"
+                  min="1"
+                  max="10"
+                  id="Quantity"
+                />
+                <span
+                  class="product_count_item number-increment"
+                  onclick="addpricesetter()"
+                >
+                  <i class="ti-plus"></i
+                ></span>
+              </div>
+              <p>
+                <i class="fa fa-inr"></i
+                ><span id="price">{{product_data.price}}</span>
+              </p>
+            </div>
+            
+            <div class="adj">
+                        <select id="size">
+
+            {% for size in product_data.size %}
+              <option value={{size}}>{{size}}</option>
+
+            {% endfor %}
+            </select>
+            </div>
+                        <br />
+            
+  
+
+            {% if product_data.is_discountable %}
+            <br />
+            <br />
+            <h4>Apply Coupon Code</h4>
+            <br />
+            <div class="mt-10">
+              <form method="post" onsubmit="return coupon()">
+                <input
+                  type="hidden"
+                  id="csrfmiddlewaretoken"
+                  name="csrfmiddlewaretoken"
+                  value="{{ csrf_token }}"
+                />
+
+                <input
+                  type="text"
+                  name="coupon_code"
+                  id="coupon_code"
+                  placeholder="Enter Coupon Code"
+                  onfocus="this.placeholder = ''"
+                  onblur="this.placeholder = 'Enter Coupon Code'"
+                  required=""
+                  class="single-input-primary circle"
+                  style="max-width: 900px; margin: 0 auto; width: auto"
+                />
+                <br />
+                <button
+                  type="Submit"
+                  class="genric-btn primary circle"
+                  style="margin-left: 10px"
+                >
+                  Apply Code
+                </button>
+              </form>
+              <br />
+
+              <h6 style="display: none" id="p1">
+                Total Amount to be Paid Now <span id="total_amt"></span>
+              </h6>
+            </div>
+
+            {% endif %}
+          
+            <div class="add_to_cart">
+              <input
+                type="button"
+               onclick="order()"
+               class="btn_3"
+               style="cursor:pointer"
+              value="add to cart">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var price = document.getElementById("price").innerHTML;
+   var iscouponcodeapplied = false;
+  
+ 
+  function addpricesetter() {
+     var Quantity =
+      parseInt(document.getElementById("Quantity").value) + 1;
+    if (Quantity < 10) {
+      var pricesettled = Quantity * price;
+      document.getElementById("price").innerHTML = pricesettled;
+      iscouponcodeapplied = false;
+    }
+  }
+
+    function subtactpricesetter() {
+       var Quantity =
+      parseInt(document.getElementById("Quantity").value) - 1;
+      if (Quantity > 0) {
+
+    var pricesettled = Quantity * price;
+    document.getElementById("price").innerHTML = pricesettled;
+          iscouponcodeapplied = false;
+
+  }
+    }
+
+function coupon() {
+    var base_url = document.location.origin + "/coupon";
+    var data = new FormData();
+    data.append(
+      "csrfmiddlewaretoken",
+      document.getElementById("csrfmiddlewaretoken").value
+    );
+    data.append("coupon_code", document.getElementById("coupon_code").value);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", base_url);
+    xhr.responseType = "json";
+    xhr.onload = function () {
+      if (this.response.success) {
+         document.getElementById("p1").style.display = "block";
+        total_amt =
+          document.getElementById("Quantity").value * this.response.amount;
+        document.getElementById("total_amt").innerHTML = total_amt;
+        document.getElementById("alert1").style.display = "flex";
+        document.getElementById("msg").innerHTML =
+          "Coupon Code Succesfully Redemed";
+        document.getElementById("alert1").style.backgroundColor = "#04AA6D";
+        iscouponcodeapplied = true;
+      } else {
+        document.getElementById("alert1").style.display = "flex";
+        document.getElementById("msg").innerHTML = "Invalid Coupon Code !";
+        document.getElementById("alert1").style.backgroundColor = "#f44336";
+      }
+    };
+    xhr.send(data);
+
+    return false;
+  }
+  
+
+    function order() {
+    var base_url = document.location.origin + "/order";
+    var data = new FormData();
+    data.append(
+      "csrfmiddlewaretoken",
+      document.getElementById("csrfmiddlewaretoken").value
+    );
+    
+    if(iscouponcodeapplied){
+      data.append(
+      "total_amt",
+      document.getElementById("total_amt").innerHTML
+    );
+    }
+    else{
+       data.append(
+      "total_amt",
+      document.getElementById("price").innerHTML
+    );
+    }
+
+  data.append(
+      "quantity",
+      document.getElementById("Quantity").value
+    );
+
+     data.append(
+      "size",
+      document.getElementById("size").value
+    );
+    
+      data.append(
+      "product_id",
+      document.getElementById("p3").innerHTML
+    );
+     data.append(
+      "anonmyous_user_id",
+       localStorage.getItem("anonmyous_user_id")
+    );
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", base_url);
+    xhr.responseType = "json";
+    xhr.onload = function () {
+              console.log("pppppppppppppppp",this.response)
+
+      if (this.response.success) {
+        document.getElementById("alert1").style.display = "flex";
+        document.getElementById("msg").innerHTML =
+          "Added To Cart Succesfully";
+        document.getElementById("alert1").style.backgroundColor = "#04AA6D";
+        if(this.response.anonmyous_user_id){
+          localStorage.setItem("anonmyous_user_id",this.response.anonmyous_user_id)
+        }
+        window.location.href="/cart/" + localStorage.getItem("anonmyous_user_id");
+      } else {
+        document.getElementById("alert1").style.display = "flex";
+        document.getElementById("msg").innerHTML = "Oops Something Went Wrong !";
+        document.getElementById("alert1").style.backgroundColor = "#f44336";
+      }
+    };
+    xhr.send(data);
+    return false;
+  }
+
+
+</script>
+
+
+  
+
+
+
+{% include 'footer.html' %}

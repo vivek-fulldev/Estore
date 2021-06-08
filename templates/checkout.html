@@ -1,0 +1,394 @@
+{% load static %} {% include 'navbar.html' %}
+
+<style>
+  .alerts {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    position: fixed;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+    top: 20px;
+    z-index: 99999;
+    right: 11px;
+    display: none;
+  }
+
+  .alerts.success {
+    background-color: #04aa6d;
+  }
+  .alerts.info {
+    background-color: #2196f3;
+  }
+  .alerts.warning {
+    background-color: #ff9800;
+  }
+
+  .closebtn {
+    margin-right: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 24px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .closebtn:hover {
+    color: black;
+  }
+
+
+</style>
+
+
+<div id="alert1" class="alerts">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';"
+    >&times;</span
+  >
+  <div style="color: white" id="msg">
+    Indicates a dangerous or potentially negative action.
+  </div>
+</div>
+
+
+<div class="slider-area">
+  <div
+    class="single-slider slider-height2 d-flex align-items-center"
+    data-background="{% static 'assets/img/hero/category.jpg' %}"
+    style="background-image: url('assets/img/hero/category.jpg')"
+  >
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="hero-cap text-center">
+            <h2>Checkout</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ <span id="total_amt" style="display:none">{{total}}</span>
+
+<section class="checkout_area section_padding">
+  <div class="container">
+    <div class="billing_details">
+      <div class="row">
+        <div class="col-lg-8">
+          <h3>Billing Details</h3>
+          <form
+            class="row contact_form"
+            action="#"
+            method="post"
+            novalidate="novalidate"
+          >
+            <input
+                  type="hidden"
+                  id="csrfmiddlewaretoken"
+                  name="csrfmiddlewaretoken"
+                  value="{{ csrf_token }}"
+                />
+            <div class="col-md-6 form-group p_star">
+              <input type="text" class="form-control" placeholder="First name *" id="first_name" name="name" />
+            </div>
+            <div class="col-md-6 form-group p_star">
+              <input type="text" class="form-control" placeholder="Last name *" id="last_name" name="name" />
+            </div>
+            <div class="col-md-6 form-group p_star">
+              <input
+                type="text"
+                class="form-control"
+                id="phone_number"
+                placeholder="Phone number *"
+                name="number"
+              />
+            </div>
+            <div class="col-md-6 form-group p_star">
+              <input
+                type="text"
+                class="form-control"
+                id="email_address"
+                placeholder="Email Address *"                
+                name="compemailany"
+              />
+            </div>
+            <div class="col-md-12 form-group p_star">
+              <input type="text" class="form-control" id="address_01" placeholder="Address line 01 *" />
+            </div>
+            <div class="col-md-12 form-group p_star">
+              <input type="text" class="form-control" id="address_02" placeholder="Address line 02" />
+            </div>
+            <div class="col-md-12 form-group p_star">
+              <input type="text" class="form-control" id="state" placeholder="Town/City *" name="state" />
+            </div>
+            <div class="col-md-12 form-group p_star">
+              <select class="country_select" id="city">
+                <option value="None">Select City</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Delhi">Delhi</option>
+              </select>
+            </div>
+            <div class="col-md-12 form-group p_star">
+              <input
+                type="text"
+                class="form-control"
+                id="postal_code"
+                placeholder="Postcode/ZIP *"
+                name="zip"
+              />
+
+            </div>
+            
+            <div class="col-md-12 form-group">
+              <div class="creat_account">
+              <br/><br/>
+                <h3>Shipping Details</h3>
+              
+              </div>
+              <textarea
+                class="form-control"
+                name="message"
+                id="order_notes"
+                rows="1"
+                placeholder="Order Notes"
+              ></textarea>
+            </div>
+          </form>
+
+       <br/><br/><br/><br/>
+   
+    
+          
+          
+
+   
+
+
+        </div>
+        <div class="col-lg-4">
+          <div class="order_box">
+            <h2>Your Order</h2>
+            <ul class="list">
+              <li>
+                <a href="#"
+                  >Product
+                  <span>Total</span>
+                </a>
+              </li>
+              {% for product in product_data %}
+              <li>
+                <a href="#" style="  display: flex;
+  justify-content: space-between;"
+                  ><p style="    color: #828bb2;
+    width: 165px;">{{product.product_id}}</p>
+                  <span class="middle" style="margin-left:-60px">x {{product.quantity}}</span>
+                  <span class="last"><i class="fa fa-inr"></i>{{product.total_amt}}</span>
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+            <ul class="list list_2">
+              <li>
+                <a href="#"
+                  >Subtotal
+                  <span><i class="fa fa-inr"></i>{{sub_total}}</span>
+                </a>
+              </li>
+              <li>
+                <a href="#"
+                  >CGST
+                  <span>(9%) : <i class="fa fa-inr"></i>{{gst}}</span>
+                </a>
+              </li>
+              <li>
+               <li>
+                <a href="#"
+                  >SGST
+                  <span>(9%) :  <i class="fa fa-inr"></i>{{gst}}</span>
+                </a>
+              </li>
+              <li>
+                <a href="#"
+                  >Total
+                  <span><i class="fa fa-inr"></i>{{total}}</span>
+                </a>
+              </li>
+            </ul>
+            <div class="payment_item">
+              <div class="radion_btn">
+                <input type="radio" id="f-option5" name="selector" onclick="cod()" />
+                <label for="f-option5">Cash On Delivery</label>
+                <div class="check"></div>
+              </div>
+              <p>
+                Please provide change (actual amount) to our 
+                Delivery Persons, if it is needed.
+              </p>
+            </div>
+            <div class="payment_item active">
+              <div class="radion_btn">
+                <input type="radio" id="f-option6" name="selector" checked />
+                <label for="f-option6">Pay Online </label>
+                <img src="img/product/single-product/card.jpg" alt="" />
+                <div id="cod" class="check"></div>
+              </div>
+              <p>
+                Pay Securely with Secure Payment System
+of Estore we always recommend you to pay online. 
+              </p>
+            </div>
+            <div class="creat_account">
+              <input type="checkbox" id="f-option4" name="selector" onclick="check()"  checked="True" />
+              <label for="f-option4">I’ve read and accept the </label>
+              <a href="#">terms & conditions*</a>
+            </div>
+            <a class="btn_3" onclick="billing_details()" href="#">Proceed to Pay</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+function cod(){
+  if(document.getElementById("city").value == "None"){
+    error("City : ","Please Select a City for COD.")
+    document.getElementById("f-option5").checked = false;
+  }
+}
+
+function check(){
+  document.getElementById("f-option4").checked =true;
+   document.getElementById("alert1").style.display = "flex";
+  document.getElementById("msg").innerHTML = "Sorry you have to agree on our terms and conditions !!";
+        document.getElementById("alert1").style.backgroundColor = "#f44336";
+}
+function error(field, msg){
+  document.getElementById("alert1").style.display = "flex";
+  document.getElementById("msg").innerHTML = "<strong>" +  field + "</strong>" +  msg ;
+  document.getElementById("alert1").style.backgroundColor = "#f44336";
+}
+
+function billing_details(){
+  var base_url = document.location.origin + "/checkout/" + localStorage.getItem("anonmyous_user_id");
+  var data = new FormData();
+  data.append(
+    "csrfmiddlewaretoken",
+    document.getElementById("csrfmiddlewaretoken").value
+  );
+    data.append(
+    "first_name",
+    document.getElementById("first_name").value
+  );
+    data.append(
+    "last_name",
+    document.getElementById("last_name").value
+  );
+ data.append(
+    "phone_number",
+    document.getElementById("phone_number").value
+  );
+   data.append(
+    "email_address",
+    document.getElementById("email_address").value
+  );
+ data.append(
+    "address_01",
+    document.getElementById("address_01").value
+  );
+   data.append(
+    "address_02",
+    document.getElementById("address_02").value
+  );
+    data.append(
+    "state",
+    document.getElementById("state").value
+  );
+      data.append(
+    "city",
+    document.getElementById("city").value
+  );
+      data.append(
+    "postal_code",
+    document.getElementById("postal_code").value
+  );
+    data.append(
+    "order_notes",
+    document.getElementById("order_notes").value
+  ); 
+   data.append(
+    "postal_code",
+    document.getElementById("postal_code").value
+  );
+  if(document.getElementById("f-option5").checked){
+       data.append(
+    "payement_method",
+    "cod"
+  );
+  }
+  else{
+     data.append(
+    "payement_method",
+    "online"
+  );
+  }
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", base_url);
+  xhr.responseType = "json";
+      xhr.onload = function () {
+      if (this.response.success) {
+        document.getElementById("alert1").style.display = "flex";
+        document.getElementById("msg").innerHTML =
+          "Order Placed Succesfully !";
+        document.getElementById("alert1").style.backgroundColor = "#04AA6D";
+        if(document.getElementById("f-option6").checked){
+          window.location.href="/pay/" + localStorage.getItem("anonmyous_user_id");
+        }
+      }
+      else if(this.response.error.address_01){
+        error("Address 01 : ",this.response.error.address_01);
+      } 
+      else if(this.response.error.city){
+        error("City : ",this.response.error.city);
+      } 
+      else if(this.response.error.email_address){
+        error("Email Address : ",this.response.error.email_address);
+      } 
+      else if(this.response.error.first_name){
+        error("First Name : ",this.response.error.first_name);
+      } 
+      else if(this.response.error.last_name){
+        error("Last Name : ",this.response.error.last_name);
+      } 
+      else if(this.response.error.phone_number){
+        error("Phone Number : ",this.response.error.phone_number);
+      }
+      else if(this.response.error.postal_code){
+        error("Postal Code : ",this.response.error.postal_code);
+      }
+      else if(this.response.error.state){
+        error("State : ",this.response.error.state);
+      }
+      else if(this.response.error.total_amt){
+        error("Total Amount : ",this.response.error.total_amt);
+      }
+      else if(document.getElementById("city").value == "None" &&	document.getElementById("cod").checked){
+        error("COD : ","Please Select the given cities for COD");
+      }
+      else {
+        document.getElementById("alert1").style.display = "flex";
+        document.getElementById("msg").innerHTML = "Something Went Wrong !!";
+        document.getElementById("alert1").style.backgroundColor = "#f44336";
+      }
+    };
+    xhr.send(data);
+    return false;
+}
+</script>
+
+{% include 'footer.html' %}

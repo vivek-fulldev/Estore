@@ -1,0 +1,92 @@
+{% load static %} {% include 'navbar.html' %}
+
+<style>
+.btn_3{
+        border: 1px solid #dc3545;
+            color: #dc3545;
+}
+.btn_3:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+</style>
+
+<div class="slider-area ">
+
+<div class="single-slider slider-height2 d-flex align-items-center" data-background={% static 'assets/img/hero/category.jpg' %}>
+<div class="container">
+<div class="row">
+<div class="col-xl-12">
+<div class="hero-cap text-center">
+<h2>My Cart</h2>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<section class="cart_area section_padding">
+<div class="container">
+<div class="cart_inner">
+<div class="table-responsive">
+<table class="table">
+<thead>
+<tr>
+<th scope="col">Product</th>
+<th scope="col">Quantity</th>
+<th scope="col">Price</th>
+<th scope="col">Total Amount</th>
+</tr>
+</thead>
+<tbody>
+
+{% for product in product_data %}
+
+<tr>
+<td>
+<div class="media">
+<div class="d-flex">
+<img src="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/media/{{product.product_id.product_image}}" alt="" />
+</div>
+<div class="media-body">
+<p>{{product.product_id}}</p>
+</div>
+</div>
+</td>
+<td>
+<h5>{{product.quantity}} pc</h5>
+</td>
+<td>
+<h5><i class="fa fa-inr"></i> {{product.product_id.price}} </h5>
+</td>
+<td>
+<h5><i class="fa fa-inr"></i> {{product.total_amt}}</h5>
+</td>
+<td>
+<button class="btn_3">Delete</button>
+</td>
+</tr>
+
+{% endfor %}
+
+
+</tbody>
+</table>
+<div class="checkout_btn_inner float-right">
+<a class="btn_1" href="#">Continue Shopping</a>
+<a class="btn_1 checkout_btn_1" href="#" onclick="checkouturl()">Proceed to checkout</a>
+</div>
+</div>
+</div>
+</section>
+
+<script>
+function checkouturl(){
+    window.location.href="/checkout/" + localStorage.getItem("anonmyous_user_id")
+}
+</script>
+
+{% include 'footer.html' %}
